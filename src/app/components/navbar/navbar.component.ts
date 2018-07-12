@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import 'rxjs/add/operator/map';
 import { auth } from 'firebase';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,7 +20,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     private flashMessageService: FlashMessagesService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    public settingsService: SettingsService
   ) { }
 
   ngOnInit() {
@@ -30,12 +32,13 @@ export class NavbarComponent implements OnInit {
       } else {
         this.isLoggedIn = false;
       }
-    })
+      this.showRegister = this.settingsService.getSettings().allowRegisteration;
+    });
   }
 
-  onLogoutClick(){
+  onLogoutClick() {
     this.authService.logout();
-    this.flashMessageService.show('You are logout successfully',{cssClass:'alert-success',timeout:4000});
+    this.flashMessageService.show('You are logout successfully', { cssClass: 'alert-success', timeout: 4000 });
     this.router.navigate(['/login']);
   }
 

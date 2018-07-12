@@ -22,12 +22,20 @@ export class AuthService {
   }
 
   //check user status
-  getAuth(){
+  getAuth() {
     return this.angularFireAuth.authState.map(auth => auth);
   }
 
   // logout user
-  logout(){
+  logout() {
     this.angularFireAuth.auth.signOut();
+  }
+  //register user
+  register(email: string, password: string) {
+    return new Promise((resolve, reject) => {
+      this.angularFireAuth.auth.createUserWithEmailAndPassword(email, password)
+        .then(userData => resolve(userData),
+          err => reject(err));
+    })
   }
 }
